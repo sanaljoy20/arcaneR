@@ -9,7 +9,7 @@
 #' @export
 document_r <- function(input_file_or_dir, output_dir) {
   # Validate inputs
-  if (!file.exists(input_file) && !dir.exists(input_file)) {
+  if (!file.exists(input_file_or_dir) && !dir.exists(input_file_or_dir)) {
     stop("Input file does not exist.")
   }
   if (!dir.exists(output_dir)) {
@@ -22,7 +22,7 @@ document_r <- function(input_file_or_dir, output_dir) {
 
   # Construct the Python command
   python_script <- "inst/python/doc_ai"
-  args <- c(input_file, "--out-dir", output_dir)
+  args <- c(input_file_or_dir, "--out-dir", output_dir)
 
   # Call the Python script
   result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
@@ -53,7 +53,7 @@ document_r <- function(input_file_or_dir, output_dir) {
 #' @export
 unit_r <- function(input_file_or_dir, output_dir) {
   # Validate inputs
-  if (!file.exists(input_file) && !dir.exists(input_file)) {
+  if (!file.exists(input_file_or_dir) && !dir.exists(input_file_or_dir)) {
     stop("Input file does not exist.")
   }
   if (!dir.exists(output_dir)) {
@@ -66,7 +66,7 @@ unit_r <- function(input_file_or_dir, output_dir) {
 
   # Construct the Python command
   python_script <- "inst/python/bug_ai"
-  args <- c(input_file, "--out-dir", output_dir)
+  args <- c(input_file_or_dir, "--out-dir", output_dir)
 
   # Call the Python script
   result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
