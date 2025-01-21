@@ -33,7 +33,7 @@ document_r <- function(input_file_or_dir, output_dir) {
     args <- c(f, "--out-dir", output_dir)
 
     # Call the Python script
-    cli::cli_alert_info("")
+    cli::cli_alert_info(paste0("ARCANE >> Adding documentation for ", f))
     result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
 
     # Handle errors
@@ -90,7 +90,7 @@ unit_r <- function(input_file_or_dir, output_dir) {
     args <- c(f, "--out-dir", output_dir)
 
     # Call the Python script
-    cli::cli_alert_info("")
+    cli::cli_alert_info(paste0("ARCANE >> Creating unit test cases for ", f))
     result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
 
     # Return the path to the documented file
