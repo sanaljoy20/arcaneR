@@ -33,7 +33,7 @@ document_r <- function(input_file_or_dir, output_dir) {
     args <- c(f, "--out-dir", output_dir)
 
     # Call the Python script
-    cli::cli_progress_along(paste0("ARCANE >> Adding documentation for ", f))
+    cli::cli_progress_step(paste0("ARCANE >> Adding documentation for ", f))
     result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
 
 
@@ -85,11 +85,11 @@ unit_r <- function(input_file_or_dir, output_dir) {
     args <- c(f, "--out-dir", output_dir)
 
     # Call the Python script
-    cli::cli_progress_along(paste0("ARCANE >> Creating unit test cases for ", f))
+    cli::cli_progress_step(paste0("ARCANE >> Creating unit test cases for ", f))
     result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
 
     # Return the path to the documented file
-    ofile <- file.path(output_dir, basename(f))
+    ofile <- file.path(output_dir, paste0("test-", basename(f)))
     if (!file.exists(ofile)) {
       output_file <- c(output_file, "Output file was not created.")
       next
