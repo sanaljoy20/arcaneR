@@ -21,7 +21,7 @@ document_r <- function(input_file_or_dir, output_dir) {
   }
 
   # Construct the Python command
-  python_script <- "inst/python/doc_ai"
+  python_script <- system.file("python", "doc_ai.py", package = "arcaneR")
   args <- c(input_file_or_dir, "--out-dir", output_dir)
 
   # Call the Python script
@@ -65,7 +65,7 @@ unit_r <- function(input_file_or_dir, output_dir) {
   }
 
   # Construct the Python command
-  python_script <- "inst/python/bug_ai"
+  python_script <- system.file("python", "bug_ai.py", package = "arcaneR")
   args <- c(input_file_or_dir, "--out-dir", output_dir)
 
   # Call the Python script
