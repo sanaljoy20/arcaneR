@@ -33,14 +33,9 @@ document_r <- function(input_file_or_dir, output_dir) {
     args <- c(f, "--out-dir", output_dir)
 
     # Call the Python script
-    cli::cli_alert_info(paste0("ARCANE >> Adding documentation for ", f))
+    cli::cli_progress_along(paste0("ARCANE >> Adding documentation for ", f))
     result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
 
-    # Handle errors
-    if (any(grepl("Error", result, ignore.case = TRUE))) {
-      output_file <- c(output_file, paste("Error in calling doc_ai:", paste(result, collapse = "\n")))
-      next
-    }
 
     # Return the path to the documented file
     ofile <- file.path(output_dir, basename(f))
@@ -50,7 +45,7 @@ document_r <- function(input_file_or_dir, output_dir) {
     }
     output_file <- c(output_file, ofile)
   }
-
+  cli::cli_process_done()
   return(output_file)
 }
 
@@ -90,7 +85,7 @@ unit_r <- function(input_file_or_dir, output_dir) {
     args <- c(f, "--out-dir", output_dir)
 
     # Call the Python script
-    cli::cli_alert_info(paste0("ARCANE >> Creating unit test cases for ", f))
+    cli::cli_progress_along(paste0("ARCANE >> Creating unit test cases for ", f))
     result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
 
     # Return the path to the documented file
@@ -102,6 +97,7 @@ unit_r <- function(input_file_or_dir, output_dir) {
     output_file <- c(output_file, ofile)
   }
 
+  cli::cli_process_done()
 
   return(output_file)
 }
