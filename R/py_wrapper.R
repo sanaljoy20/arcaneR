@@ -20,22 +20,35 @@ document_r <- function(input_file_or_dir, output_dir) {
     stop("OPENAI_API_KEY should be present in the env.")
   }
 
-  # Construct the Python command
-  python_script <- system.file("python", "doc_ai.py", package = "arcaneR")
-  args <- c(input_file_or_dir, "--out-dir", output_dir)
-
-  # Call the Python script
-  result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
-
-  # Handle errors
-  if (any(grepl("Error", result, ignore.case = TRUE))) {
-    stop(paste("Error in calling doc_ai:", paste(result, collapse = "\n")))
+  if(dir.exists(input_file_or_dir)) {
+    r_files <- list.files(path = input_file_or_dir, pattern = "\\.R$", full.names = TRUE)
+  } else {
+    r_files <- input_file_or_dir
   }
 
-  # Return the path to the documented file
-  output_file <- file.path(output_dir, basename(input_file))
-  if (!file.exists(output_file)) {
-    stop("Output file was not created.")
+  output_file <- c()
+  for(f in r_files) {
+    # Construct the Python command
+    python_script <- system.file("python", "doc_ai", package = "arcaneR")
+    args <- c(f, "--out-dir", output_dir)
+
+    # Call the Python script
+    cli::cli_alert_info("")
+    result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
+
+    # Handle errors
+    if (any(grepl("Error", result, ignore.case = TRUE))) {
+      output_file <- c(output_file, paste("Error in calling doc_ai:", paste(result, collapse = "\n")))
+      next
+    }
+
+    # Return the path to the documented file
+    ofile <- file.path(output_dir, basename(f))
+    if (!file.exists(ofile)) {
+      output_file <- c(output_file, "Output file was not created.")
+      next
+    }
+    output_file <- c(output_file, ofile)
   }
 
   return(output_file)
@@ -64,18 +77,31 @@ unit_r <- function(input_file_or_dir, output_dir) {
     stop("OPENAI_API_KEY should be present in the env.")
   }
 
-  # Construct the Python command
-  python_script <- system.file("python", "bug_ai.py", package = "arcaneR")
-  args <- c(input_file_or_dir, "--out-dir", output_dir)
-
-  # Call the Python script
-  result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
-
-  # Return the path to the documented file
-  output_file <- file.path(output_dir, basename(input_file))
-  if (!file.exists(output_file)) {
-    stop("Output file was not created.")
+  if(dir.exists(input_file_or_dir)) {
+    r_files <- list.files(path = input_file_or_dir, pattern = "\\.R$", full.names = TRUE)
+  } else {
+    r_files <- input_file_or_dir
   }
+
+  output_file <- c()
+  for(f in r_files) {
+    # Construct the Python command
+    python_script <- system.file("python", "bug_ai", package = "arcaneR")
+    args <- c(f, "--out-dir", output_dir)
+
+    # Call the Python script
+    cli::cli_alert_info("")
+    result <- system2("python", c(python_script, args), stdout = TRUE, stderr = TRUE)
+
+    # Return the path to the documented file
+    ofile <- file.path(output_dir, basename(f))
+    if (!file.exists(ofile)) {
+      output_file <- c(output_file, "Output file was not created.")
+      next
+    }
+    output_file <- c(output_file, ofile)
+  }
+
 
   return(output_file)
 }
